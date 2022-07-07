@@ -1,0 +1,75 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+	
+# useDotenv: true
+service: aws-contact-html-form
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  environment:
+  stage: ${env:STAGE, 'dev'}
+  region: ${env:REGION, 'eu-central-1'}
+  httpApi:
+    cors:
+      allowedOrigins:
+       - ${env:CORS1, '*'}
+  iam:
+    role:
+      statements:
+      - Effect: Allow
+        Action:
+          - ses:SendEmail
+          - ses:SendRawEmail
+          - ses:VerifyEmailIdentity
+          - ses:VerifyDomainIdentity
+          - ses:DeleteIdentity
+        Resource: "*"
+
+
+# you can add packaging information here
+package:
+ patterns:
+  #  - '!exclude-me.py'
+   - '!terraform/**'
+   - '!app/**'
+#    - include-me.py
+#    - include-me-dir/**
+
+functions:
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+  contact:
+    handler: send_email.sendEmail
+    events:
+     - httpApi:
+         path: /contact
+         method: post
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    # dockerFile: ./Dockerfile
+    dockerizePip: "false"
+    #zip: true
