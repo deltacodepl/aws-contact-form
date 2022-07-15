@@ -18,13 +18,13 @@ resource "aws_s3_bucket_versioning" "js-contact-form-ver" {
     }
 }
 
-resource "aws_s3_object" "formjs" {
-    bucket = aws_s3_bucket.js-contact-form.id
-    key = "form.js"
-    source = "../form.js"
-    etag = filemd5("../form.js")
-    acl = "public-read"
-}
+# resource "aws_s3_object" "formjs" {
+#     bucket = aws_s3_bucket.js-contact-form.id
+#     key = "form.js"
+#     source = "../form.js"
+#     etag = filemd5("../form.js")
+#     acl = "public-read"
+# }
    
 
 
