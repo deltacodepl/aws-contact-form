@@ -10,15 +10,15 @@ attributes = {"pad": "1.0", "fontsize": "25"}
 with Diagram(
     "", show=True, direction="LR", outformat="png", graph_attr=attributes
 ):
-    tablet = Tablet("HTML Contact Form")
-    api = APIGateway("Http API")
+    # tablet = Tablet("HTML Contact Form")
+    api = APIGateway("Http API GW")
     send_email = LambdaFunction("Lambda function")
-    email_service = SES("Email Service")
+    email_service = SES("SES Email Service")
 
-    db = Dynamodb("primary DB")
+    # db = Dynamodb("primary DB")
 
-    # >> S3("s3")
+    # >> 
     
-    tablet >> api >> send_email >> email_service >> db
+    S3("s3") >> api >> send_email >> email_service
 
   
