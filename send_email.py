@@ -1,5 +1,4 @@
 from email.quoprimime import body_check
-import imp
 import os
 import json
 import boto3
@@ -60,16 +59,16 @@ def sendEmail(event, context):
                     },
                     "Subject": {
                         "Charset": 'UTF-8',
-                        "Data":  " ".join(("Wiadomość S24 from ", body.get('senderName'), data['email'])),
+                        "Data":  " ".join(("Message from ", body.get('senderName'), data['email'])),
                     },
                 },
                 Source=EMAIL_SOURCE,
             )
 
+            return response(SUCCESS)
+
         except (ClientError, Exception) as e:
             print('SES error', e)
             return response(SERVER_ERROR)
-
-        return response(SUCCESS)
 
     else: return response(SERVER_ERROR)

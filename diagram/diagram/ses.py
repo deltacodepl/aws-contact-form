@@ -14,11 +14,6 @@ with Diagram(
     api = APIGateway("Http API GW")
     send_email = LambdaFunction("Lambda function")
     email_service = SES("SES Email Service")
-
-    # db = Dynamodb("primary DB")
-
-    # >> 
-    
     S3("s3") >> api >> send_email >> email_service
 
   
