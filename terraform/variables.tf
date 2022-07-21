@@ -8,3 +8,10 @@ variable "bucket_name" {
     default = "js-contact-form"
 }
 
+variable "domain_name" {
+  type = string
+}
+
+variable "cert_domain_name" {
+  type = string  
+}
