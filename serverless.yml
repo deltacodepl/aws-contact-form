@@ -49,7 +49,8 @@ package:
  patterns:
   #  - '!exclude-me.py'
    - '!terraform/**'
-   - '!app/**'
+   - '!diagram/**'
+   - '!node_modules/**'
 #    - include-me.py
 #    - include-me-dir/**
 

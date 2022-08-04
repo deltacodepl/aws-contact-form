@@ -1,5 +1,3 @@
-
-
 locals {
   mime_types = {
     "css"  = "text/css"
@@ -14,10 +12,6 @@ locals {
   }
 }
 
-resource "aws_s3_bucket" "promo-logs" {
-  bucket = "promo-opak-pl.logs"
-}
-
 data "template_file" "front_policy"{
     template = file("${path.module}/templates/s3policy.json")
     vars = {
@@ -25,7 +19,7 @@ data "template_file" "front_policy"{
     }
 }
 
-resource "aws_s3_bucket" "s3_front_opak_bucket" {
+resource "aws_s3_bucket" "s3_html_form_bucket" {
   bucket = var.cert_domain_name
 
   tags = {
@@ -33,26 +27,26 @@ resource "aws_s3_bucket" "s3_front_opak_bucket" {
   }
 }
 
-resource "aws_s3_bucket_policy" "opak-pl-website-policy" {
-  bucket = aws_s3_bucket.s3_front_opak_bucket.id
+resource "aws_s3_bucket_policy" "html-form-website-policy" {
+  bucket = aws_s3_bucket.s3_html_form_bucket.id
   policy = data.template_file.front_policy.rendered
 }
 
-resource "aws_s3_bucket_acl" "front_opak_bucket_acl" {
-  bucket = aws_s3_bucket.s3_front_opak_bucket.id
+resource "aws_s3_bucket_acl" "front_html_bucket_acl" {
+  bucket = aws_s3_bucket.s3_html_form_bucket.id
   acl    = "public-read"
 }
 
 
-resource "aws_s3_bucket_versioning" "s3_front_opak_bucket-ver" {
-    bucket = aws_s3_bucket.s3_front_opak_bucket.id
+resource "aws_s3_bucket_versioning" "s3_front_html_bucket-ver" {
+    bucket = aws_s3_bucket.s3_html_form_bucket.id
     versioning_configuration {
       status = "Suspended"
     }
 }
 
-resource "aws_s3_bucket_website_configuration" "opak-promo-pl-website-conf" {
-  bucket = aws_s3_bucket.s3_front_opak_bucket.id
+resource "aws_s3_bucket_website_configuration" "html-form-pl-website-conf" {
+  bucket = aws_s3_bucket.s3_html_form_bucket.id
 
   index_document {
     suffix = "index.html"
@@ -73,10 +67,10 @@ resource "aws_s3_bucket_website_configuration" "opak-promo-pl-website-conf" {
 }
 
 # upload the website
-resource "aws_s3_object" "promo-opak-pl-website" {
+resource "aws_s3_object" "html-form-pl-website" {
   for_each = fileset("./app/src", "**")
   acl = "public-read"
-  bucket = aws_s3_bucket.s3_front_opak_bucket.id
+  bucket = aws_s3_bucket.s3_html_form_bucket.id
   key = each.key
   source = "${path.module}/app/src/${each.key}"
   content_type = lookup(tomap(local.mime_types), element(split(".", each.key), length(split(".", each.key)) - 1))

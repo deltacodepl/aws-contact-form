@@ -18,7 +18,3 @@ provider "aws" {
     region = var.aws_region
 }
 
-provider "ovh" {
-  endpoint           = "ovh-eu"
-  
-}
